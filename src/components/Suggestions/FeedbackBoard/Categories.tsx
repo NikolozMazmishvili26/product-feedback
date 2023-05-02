@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 // import components
@@ -6,10 +7,24 @@ import { Category } from "../..";
 const categories = ["All", "UI", "UX", "Enhancement", "Bug", "Feature"];
 
 function Categories() {
+  //
+  const [activeCategory, setActiveCategory] = useState(0);
+
+  const handleCategory = (index: number) => {
+    setActiveCategory(index);
+  };
+
   return (
     <Container>
       {categories.map((category, Index) => {
-        return <Category key={Index} category={category} />;
+        return (
+          <Category
+            key={Index}
+            category={category}
+            isActive={activeCategory === Index}
+            onClick={() => handleCategory(Index)}
+          />
+        );
       })}
     </Container>
   );
