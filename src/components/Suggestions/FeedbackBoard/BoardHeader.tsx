@@ -1,19 +1,66 @@
+import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 // import assets
-import { hamburger } from "../../../assets";
+import { hamburger, closeIcon } from "../../../assets";
+// import components
+import { Categories, RoadMap } from "../../../components";
 
 function BoardHeader() {
+  //
+  const [showMenu, setShowMenu] = useState(false);
+
+  useEffect(() => {
+    if (showMenu) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "visible";
+    }
+  }, [showMenu]);
+
+  const backDropRef = useRef(null);
+
+  const handleBackdrop: React.MouseEventHandler<HTMLDivElement> | undefined = (
+    event
+  ) => {
+    if (event.target === backDropRef.current) {
+      setShowMenu(false);
+    }
+  };
+
   return (
-    <Container>
-      <LeftSide>
-        <Title>Frontend Mentor</Title>
-        <Text>Feedback Board</Text>
-      </LeftSide>
-      <RightSide>
-        <Hamburger src={hamburger} alt="hamburger" />
-      </RightSide>
-    </Container>
+    <>
+      <Container>
+        <LeftSide>
+          <Title>Frontend Mentor</Title>
+          <Text>Feedback Board</Text>
+        </LeftSide>
+        <RightSide>
+          {showMenu ? (
+            <MenuIcon
+              src={closeIcon}
+              alt="close"
+              onClick={() => setShowMenu(false)}
+            />
+          ) : (
+            <MenuIcon
+              src={hamburger}
+              alt="hamburger"
+              onClick={() => setShowMenu(true)}
+            />
+          )}
+        </RightSide>
+      </Container>
+      {/* Backdrop */}
+      {showMenu && (
+        <Backdrop ref={backDropRef} onClick={handleBackdrop}>
+          <Content>
+            <Categories />
+            <RoadMap />
+          </Content>
+        </Backdrop>
+      )}
+    </>
   );
 }
 
@@ -79,6 +126,35 @@ const RightSide = styled.div`
   }
 `;
 
-const Hamburger = styled.img`
+const MenuIcon = styled.img`
   cursor: pointer;
+`;
+
+// Backdrop
+
+const Backdrop = styled.div`
+  width: 100%;
+  position: absolute;
+  height: 100vh;
+  z-index: 9999;
+  top: 73px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: height 2s ease-in;
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const Content = styled.div`
+  width: 271px;
+  height: 100%;
+  background-color: var(--pale-grayish-blue);
+  padding: 24px 24px 0px 24px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
 `;

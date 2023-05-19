@@ -1,52 +1,13 @@
-import { useState } from "react";
 import styled from "styled-components";
 
 // import assets
 import { emptyIllustration } from "../../../assets";
 // import components
 import { FeedbackButton, Suggestion } from "../../../components";
-// import data
-import data from "../../../../data.json";
+// import interface
+import { SuggestionProps } from "./SuggestionContent";
 
-// interface
-
-export interface SuggestionProps {
-  id: number;
-  title: string;
-  category: string;
-  upvotes: number;
-  status: string;
-  description: string;
-  comments?: Comment[];
-}
-
-interface Comment {
-  id: number;
-  content: string;
-  user: {
-    image: string;
-    name: string;
-    username: string;
-  };
-  replies?: Reply[];
-}
-
-interface Reply {
-  content: string;
-  replyingTo: string;
-  user: {
-    image: string;
-    name: string;
-    username: string;
-  };
-}
-
-function Content() {
-  //
-  const [suggestions, setSuggestions] = useState<SuggestionProps[]>(
-    data.productRequests
-  );
-
+function Content({ suggestions }: { suggestions: SuggestionProps[] }) {
   return (
     <Container>
       <MainContent>

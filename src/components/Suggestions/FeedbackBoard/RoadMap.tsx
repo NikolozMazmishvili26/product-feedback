@@ -1,20 +1,41 @@
+import { Link } from "react-router-dom";
+import { useState } from "react";
 import styled from "styled-components";
 
 // import components
 import { ProgressBar } from "../../../components";
+// import data
+import data from "../../../../data.json";
+// import interface
+import { SuggestionProps } from "../SuggestionContent/SuggestionContent";
 
 function RoadMap() {
+  //
+  const [dataRoadMap, setDataRoadMap] = useState<SuggestionProps[]>(
+    data.productRequests
+  );
+
   return (
     <Container>
       <TitleContainer>
         <Title>Roadmap</Title>
-        <View>View</View>
+        <Link to="/roadmap">
+          <View>View</View>
+        </Link>
       </TitleContainer>
       {/*  */}
       <ProgressWrapper>
-        <ProgressBar title="Planned" color="var(--orange-color)" />
-        <ProgressBar title="In-Progress" color="var(--purple-color)" />
-        <ProgressBar title="Live" color="var(--sky-blue)" />
+        <ProgressBar
+          title="planned"
+          color="var(--orange-color)"
+          data={dataRoadMap}
+        />
+        <ProgressBar
+          title="in-progress"
+          color="var(--purple-color)"
+          data={dataRoadMap}
+        />
+        <ProgressBar title="live" color="var(--sky-blue)" data={dataRoadMap} />
       </ProgressWrapper>
     </Container>
   );
@@ -23,16 +44,14 @@ function RoadMap() {
 export default RoadMap;
 
 const Container = styled.div`
-  display: none;
-  @media screen and (min-width: 768px) {
-    display: block;
-    background: #ffffff;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    row-gap: 24px;
-    padding: 24px 18px 36px 24px;
-  }
+  display: block;
+  background: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+  padding: 24px 18px 36px 24px;
+
   @media screen and (min-width: 1110px) {
     padding: 19px 24px 24px 24px;
   }

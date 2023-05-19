@@ -6,8 +6,12 @@ function BoardBox() {
   return (
     <Container>
       <BoardHeader />
-      <Categories />
-      <RoadMap />
+      <VisibleContainer>
+        <Categories />
+      </VisibleContainer>
+      <VisibleContainer>
+        <RoadMap />
+      </VisibleContainer>
     </Container>
   );
 }
@@ -25,5 +29,12 @@ const Container = styled.div`
     grid-template-columns: 255px;
     row-gap: 24px;
     column-gap: 0px;
+  }
+`;
+
+const VisibleContainer = styled.div`
+  display: none;
+  @media screen and (min-width: 768px) {
+    display: block;
   }
 `;

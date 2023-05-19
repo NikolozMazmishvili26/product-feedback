@@ -1,6 +1,19 @@
 import styled from "styled-components";
+// import interface
+import { SuggestionProps } from "../SuggestionContent/SuggestionContent";
 
-function ProgressBar({ title, color }: { title: string; color: string }) {
+function ProgressBar({
+  title,
+  color,
+  data,
+}: {
+  title: string;
+  color: string;
+  data: SuggestionProps[];
+}) {
+  //
+  const statistic = data.filter((statistic) => statistic.status === title);
+
   return (
     <Container>
       <LeftSide>
@@ -8,7 +21,7 @@ function ProgressBar({ title, color }: { title: string; color: string }) {
         <Title>{title}</Title>
       </LeftSide>
       <RightSide>
-        <Length>0</Length>
+        <Length>{statistic.length}</Length>
       </RightSide>
     </Container>
   );
@@ -41,6 +54,7 @@ const Title = styled.h2`
   font-size: 16px;
   line-height: 23px;
   color: var(--slate-blue);
+  text-transform: capitalize;
 `;
 
 const RightSide = styled.div``;

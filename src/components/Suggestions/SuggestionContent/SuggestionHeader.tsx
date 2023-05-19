@@ -1,33 +1,96 @@
+import { useState } from "react";
+import { SuggestionProps } from "./SuggestionContent";
 import styled from "styled-components";
 
 // import assets
 import { suggestionsIcon, downArrow } from "../../../assets";
 
 // import components
-import { FeedbackButton } from "../../../components";
+import { FeedbackButton, FilterValue } from "../../../components";
 
-function SuggestionHeader() {
+function SuggestionHeader({
+  selectedFilterValue,
+  setSelectedFilterValue,
+  setSuggestions,
+  suggestions,
+}: {
+  selectedFilterValue: string;
+  setSelectedFilterValue: React.Dispatch<React.SetStateAction<string>>;
+  suggestions: SuggestionProps[];
+  setSuggestions: React.Dispatch<React.SetStateAction<SuggestionProps[]>>;
+}) {
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+
+  const filterValues = [
+    "Most Upvotes",
+    "Least Upvotes",
+    "Most Comments",
+    "Least Comments",
+  ];
+
+  const handleSelectFilterValue = (filterValue: string) => {
+    setSelectedFilterValue(filterValue);
+    const sortFunc = (a: SuggestionProps, b: SuggestionProps) => {
+      switch (filterValue) {
+        case "Most Upvotes":
+          return b.upvotes - a.upvotes;
+        case "Least Upvotes":
+          return a.upvotes - b.upvotes;
+        case "Most Comments":
+          return (b.comments?.length ?? 0) - (a.comments?.length ?? 0);
+        case "Least Comments":
+          return (a.comments?.length ?? 0) - (b.comments?.length ?? 0);
+        default:
+          return 0;
+      }
+    };
+    setSuggestions((suggestions) => [...suggestions].sort(sortFunc));
+    setShowFilterMenu(false);
+  };
+
+  //
+
   return (
-    <Container>
-      <LeftSide>
-        {/* suggestion */}
-        <SuggestionContainer>
-          <SuggestionImage src={suggestionsIcon} alt="suggestion" />
-          <SuggestionTitle>6 Suggestions</SuggestionTitle>
-        </SuggestionContainer>
-        {/* sort */}
-        <SortContainer>
-          <SortTitle>Sort by : </SortTitle>
-          <MustUpvotesButton>
-            Most Upvotes
-            <DownArrowImage src={downArrow} alt="arrow" />
-          </MustUpvotesButton>
-        </SortContainer>
-      </LeftSide>
-      <RightSide>
-        <FeedbackButton />
-      </RightSide>
-    </Container>
+    <>
+      <Container>
+        <LeftSide>
+          {/* suggestion */}
+          <SuggestionContainer>
+            <SuggestionImage src={suggestionsIcon} alt="suggestion" />
+            <SuggestionTitle>{suggestions.length} Suggestions</SuggestionTitle>
+          </SuggestionContainer>
+          {/* sort */}
+          <SortContainer>
+            <SortTitle>Sort by : </SortTitle>
+            <MustUpvotesButton
+              onClick={() => setShowFilterMenu(!showFilterMenu)}
+            >
+              {selectedFilterValue}
+              <DownArrowImage src={downArrow} alt="arrow" />
+            </MustUpvotesButton>
+          </SortContainer>
+        </LeftSide>
+        <RightSide>
+          <FeedbackButton />
+        </RightSide>
+      </Container>
+      {/* filter container */}
+      {showFilterMenu && (
+        <FilterContainer>
+          {filterValues.map((filterValue, Index) => {
+            const isSelected = selectedFilterValue === filterValue;
+            return (
+              <FilterValue
+                key={Index}
+                filterValue={filterValue}
+                isSelected={isSelected}
+                onSelect={() => handleSelectFilterValue(filterValue)}
+              />
+            );
+          })}
+        </FilterContainer>
+      )}
+    </>
   );
 }
 
@@ -113,10 +176,23 @@ const MustUpvotesButton = styled.button`
   display: flex;
   column-gap: 9px;
   align-items: center;
+
   @media screen and (min-width: 768px) {
     font-size: 14px;
     line-height: 20px;
   }
+`;
+
+const FilterContainer = styled.div`
+  position: absolute;
+  z-index: 9999;
+  left: 50%;
+  transform: translate(-50%);
+  margin-top: 16px;
+  background-color: var(--white-color);
+  box-shadow: 0px 10px 40px -7px rgba(55, 63, 104, 0.350492);
+  border-radius: 10px;
+  width: 255px;
 `;
 
 const DownArrowImage = styled.img``;

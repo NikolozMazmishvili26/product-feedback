@@ -1,3 +1,4 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
@@ -70,13 +71,18 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 // import pages
-import { Suggestions } from "./pages";
+import { Suggestions, Roadmap } from "./pages";
 
 function App() {
   return (
     <>
       <GlobalStyles />
-      <Suggestions />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Suggestions />}></Route>
+          <Route path="/roadmap" element={<Roadmap />}></Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

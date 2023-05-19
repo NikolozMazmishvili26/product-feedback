@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 // import interface
-import { SuggestionProps } from "./Content";
+import { SuggestionProps } from "./SuggestionContent";
 // import assets
 import { upArrow, commentsIcon } from "../../../assets";
 
